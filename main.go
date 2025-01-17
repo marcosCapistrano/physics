@@ -8,9 +8,6 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-const screenWidth = 800
-const screenHeight = 600
-
 var particle *physics.Particle
 var fps int32
 
