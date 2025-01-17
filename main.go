@@ -37,14 +37,32 @@ func update() {
 	deltaTime := rl.GetFrameTime()
 	fps = int32(1 / deltaTime)
 
-	weightForce := physics.NewVec2(0, 9.8*particle.Mass*PIXELS_PER_METER)
+	// weightForce := physics.NewVec2(0, 9.8*particle.Mass*physics.PIXELS_PER_METER)
+	// particle.AddForce(weightForce)
 
-	particle.AddForce(weightForce)
 	if particle.Position.Y > 400 {
-		particle.AddForce(physics.NewDragForce(particle.Velocity, 0.25))
-	} else {
 		particle.AddForce(physics.NewDragForce(particle.Velocity, 0.01))
+	} else {
+		particle.AddForce(physics.NewDragForce(particle.Velocity, 0.001))
 	}
+
+	if rl.IsKeyDown(rl.KeyRight) {
+		particle.AddForce(physics.NewVec2(10.0*physics.PIXELS_PER_METER, 0))
+	}
+
+	if rl.IsKeyDown(rl.KeyLeft) {
+		particle.AddForce(physics.NewVec2(-10.0*physics.PIXELS_PER_METER, 0))
+	}
+
+	if rl.IsKeyDown(rl.KeyUp) {
+		particle.AddForce(physics.NewVec2(0, -10*physics.PIXELS_PER_METER))
+	}
+
+	if rl.IsKeyDown(rl.KeyDown) {
+		particle.AddForce(physics.NewVec2(0, 10*physics.PIXELS_PER_METER))
+	}
+
+	particle.AddForce(physics.NewFrictionForce(particle.Velocity, 1))
 	particle.Integrate(deltaTime)
 
 	x := particle.Position.X
@@ -66,4 +84,5 @@ func update() {
 		particle.Position.Y = radius
 		particle.Velocity.Y *= -1
 	}
+
 }

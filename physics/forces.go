@@ -17,3 +17,16 @@ func NewDragForce(velocity Vec2, k float32) Vec2 {
 
 	return dragForce
 }
+
+func NewFrictionForce(velocity Vec2, k float32) Vec2 {
+	fricDirection := velocity
+
+	fricDirection.X *= -1
+	fricDirection.Y *= -1
+
+	fricForce := fricDirection
+	fricForce.X *= k
+	fricForce.Y *= k
+
+	return fricForce
+}

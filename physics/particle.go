@@ -36,8 +36,8 @@ func (p *Particle) ClearForces() {
 
 func (p *Particle) Integrate(deltaTime float32) {
 	/* acceleration */
-	p.Acceleration.X = p.sumOfForces.X * p.InvMass
-	p.Acceleration.Y = p.sumOfForces.Y * p.InvMass
+	p.Acceleration.X = p.sumOfForces.X * PIXELS_PER_METER * p.InvMass
+	p.Acceleration.Y = p.sumOfForces.Y * PIXELS_PER_METER * p.InvMass
 
 	/* velocity */
 	p.Velocity.X += p.Acceleration.X * deltaTime
