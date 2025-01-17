@@ -18,7 +18,7 @@ func main() {
 	rl.InitWindow(screenWidth, screenHeight, "Physics")
 	rl.SetTargetFPS(61)
 
-	particle = physics.NewParticle(screenWidth/2, screenHeight/2, 5, 5)
+	particle = physics.NewParticle(screenWidth/2, 0, 5, 5)
 
 	for !rl.WindowShouldClose() {
 		update()
@@ -26,6 +26,7 @@ func main() {
 		{
 			rl.ClearBackground(rl.Black)
 			rl.DrawText(fmt.Sprintf("FPS: %d", fps), 10, 0, 16, rl.White)
+			rl.DrawRectangle(0, 400, 800, 200, rl.Blue)
 			rl.DrawCircle(int32(particle.Position.X), int32(particle.Position.Y), particle.Radius, rl.White)
 		}
 		rl.EndDrawing()
@@ -37,10 +38,13 @@ func update() {
 	fps = int32(1 / deltaTime)
 
 	weightForce := physics.NewVec2(0, 9.8*particle.Mass*PIXELS_PER_METER)
-	windForce := physics.NewVec2(2.0*PIXELS_PER_METER, 0)
 
 	particle.AddForce(weightForce)
-	particle.AddForce(windForce)
+	if particle.Position.Y > 400 {
+		particle.AddForce(physics.NewDragForce(particle.Velocity, 0.25))
+	} else {
+		particle.AddForce(physics.NewDragForce(particle.Velocity, 0.01))
+	}
 	particle.Integrate(deltaTime)
 
 	x := particle.Position.X
