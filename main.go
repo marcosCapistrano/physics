@@ -11,7 +11,7 @@ import (
 const screenWidth = 800
 const screenHeight = 600
 
-var particle physics.Particle
+var particle *physics.Particle
 var fps int32
 
 func main() {
@@ -19,7 +19,6 @@ func main() {
 	rl.SetTargetFPS(61)
 
 	particle = physics.NewParticle(screenWidth/2, screenHeight/2, 5, 5)
-	particle.Velocity.X = 4 * PIXELS_PER_METER
 
 	for !rl.WindowShouldClose() {
 		update()
@@ -37,11 +36,12 @@ func update() {
 	deltaTime := rl.GetFrameTime()
 	fps = int32(1 / deltaTime)
 
-	particle.Acceleration = physics.NewVec2(0, 90.8*PIXELS_PER_METER)
-	particle.Velocity.X += particle.Acceleration.X * deltaTime
-	particle.Velocity.Y += particle.Acceleration.Y * deltaTime
-	particle.Position.X += particle.Velocity.X * deltaTime
-	particle.Position.Y += particle.Velocity.Y * deltaTime
+	weightForce := physics.NewVec2(0, 9.8*particle.Mass*PIXELS_PER_METER)
+	windForce := physics.NewVec2(2.0*PIXELS_PER_METER, 0)
+
+	particle.AddForce(weightForce)
+	particle.AddForce(windForce)
+	particle.Integrate(deltaTime)
 
 	x := particle.Position.X
 	y := particle.Position.Y
